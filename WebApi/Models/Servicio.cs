@@ -14,18 +14,9 @@ namespace WebApi.Models
     
     public partial class Servicio
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Servicio()
-        {
-            this.DetalleFactura = new HashSet<DetalleFactura>();
-        }
-    
         public int IdServicio { get; set; }
+        public int IdTipoServicio { get; set; }
         public string Nombre { get; set; }
         public Nullable<decimal> CostoBase { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
-        public virtual TipoServicio TipoServicio { get; set; }
     }
 }
