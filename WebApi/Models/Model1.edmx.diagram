@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9512ba2f6bee4d30b51bba5d98452ffa" Name="Diagram1">
+        <EntityTypeShape EntityType="BDServicioModel.Cliente" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.DetalleFactura" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.Factura" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.Servicio" Width="1.5" PointX="3" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.TipoServicio" Width="1.5" PointX="0.75" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.Ubicacion" Width="1.5" PointX="1.5" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.Zona" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BDServicioModel.ZonaCliente" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="BDServicioModel.FK_Factura_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_ZonaCliente_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_DetalleFactura_Factura" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_DetalleFactura_Servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_Factura_ZonaCliente" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_Servicio_TipoServicio" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_Zona_Ubicacion" ManuallyRouted="false" />
+        <AssociationConnector Association="BDServicioModel.FK_ZonaCliente_Zona" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
