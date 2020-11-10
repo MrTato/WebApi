@@ -12,6 +12,7 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
+    [Authorize]
     public class ClientesController : ApiController
     {
         private BDServicioEntities db = new BDServicioEntities();
