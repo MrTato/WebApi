@@ -12,44 +12,44 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    public class FacturasController : ApiController
+    public class ClienteController : ApiController
     {
-        private BDServicioEntities db = new BDServicioEntities();
+        private BDServicioEntities1 db = new BDServicioEntities1();
 
-        // GET: api/Facturas
-        public IQueryable<Factura> GetFactura()
+        // GET: api/Clientes
+        public IQueryable<Cliente> GetCliente()
         {
-            return db.Factura;
+            return db.Cliente;
         }
 
-        // GET: api/Facturas/5
-        [ResponseType(typeof(Factura))]
-        public IHttpActionResult GetFactura(int id)
+        // GET: api/Clientes/5
+        [ResponseType(typeof(Cliente))]
+        public IHttpActionResult GetCliente(int id)
         {
-            Factura factura = db.Factura.Find(id);
-            if (factura == null)
+            Cliente cliente = db.Cliente.Find(id);
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            return Ok(factura);
+            return Ok(cliente);
         }
 
-        // PUT: api/Facturas/5
+        // PUT: api/Clientes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutFactura(int id, Factura factura)
+        public IHttpActionResult PutCliente(int id, Cliente cliente)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != factura.IdFactura)
+            if (id != cliente.IdCliente)
             {
                 return BadRequest();
             }
 
-            db.Entry(factura).State = EntityState.Modified;
+            db.Entry(cliente).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FacturaExists(id))
+                if (!ClienteExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Facturas
-        [ResponseType(typeof(Factura))]
-        public IHttpActionResult PostFactura(Factura factura)
+        // POST: api/Clientes
+        [ResponseType(typeof(Cliente))]
+        public IHttpActionResult PostCliente(Cliente cliente)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Factura.Add(factura);
+            db.Cliente.Add(cliente);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = factura.IdFactura }, factura);
+            return CreatedAtRoute("DefaultApi", new { id = cliente.IdCliente }, cliente);
         }
 
-        // DELETE: api/Facturas/5
-        [ResponseType(typeof(Factura))]
-        public IHttpActionResult DeleteFactura(int id)
+        // DELETE: api/Clientes/5
+        [ResponseType(typeof(Cliente))]
+        public IHttpActionResult DeleteCliente(int id)
         {
-            Factura factura = db.Factura.Find(id);
-            if (factura == null)
+            Cliente cliente = db.Cliente.Find(id);
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            db.Factura.Remove(factura);
+            db.Cliente.Remove(cliente);
             db.SaveChanges();
 
-            return Ok(factura);
+            return Ok(cliente);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace WebApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool FacturaExists(int id)
+        private bool ClienteExists(int id)
         {
-            return db.Factura.Count(e => e.IdFactura == id) > 0;
+            return db.Cliente.Count(e => e.IdCliente == id) > 0;
         }
     }
 }

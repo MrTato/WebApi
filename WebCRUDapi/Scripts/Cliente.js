@@ -1,12 +1,12 @@
 ﻿var tableHdr = null;
-var IdRecord = 0;
+var IdCliente = 0;
 
 $(document).ready(function () {
     loadData();
 
     $('#btnnuevo').on('click', function (e) {
         e.preventDefault();
-        IdRecord = 0;
+        IdCliente = 0;
         NewRecord();
     });
 
@@ -19,13 +19,13 @@ $(document).ready(function () {
         var _this = $(this).parents('tr');
         var data = tableHdr.row(_this).data();
         loadDtl(data);
-        IdRecord = data.CreditCardID;
+        IdRecord = data.IdCliente;
     });
 
     $('#dt-records').on('click', 'button.btn-delete', function (e) {
         var _this = $(this).parents('tr');
         var data = tableHdr.row(_this).data();
-        IdRecord = data.CreditCardID;
+        IdRecord = data.IdCliente;
         if (confirm('¿Seguro de eliminar el registro?')) {
             Eliminar();
         }
@@ -91,23 +91,23 @@ function loadData() {
             },
             {
                 width: "10%",
-                targets: 3,
+                targets: 4,
                 data: "Tipo"
             },
             {
                 width: "10%",
-                targets: 3,
+                targets: 5,
                 data: "Estado"
             },
             {
                 width: "5%",
-                targets: 4,
+                targets: 6,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-info btn-sm btn-edit" data-target="#modal-record"><i class="fa fa-pencil"></i></button>'
             },
             {
                 width: "5%",
-                targets: 5,
+                targets: 7,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>'
 
@@ -117,9 +117,8 @@ function loadData() {
 }
 
 function NewRecord() {
-    $(".modal-header h3").text("Registrar cliente");
+    $(".modal-header h3").text("Registrar Cliente");
 
-    $('#txtIdCliente').val('');
     $('#txtNombre').val('');
     $('#txtApellido').val('');
     $('#txtTelefono').val('');
@@ -130,12 +129,12 @@ function NewRecord() {
 }
 
 function loadDtl(data) {
-    $(".modal-header h3").text("Editar datos de cliente");
+    $(".modal-header h3").text("Editar Cliente");
 
     $('#txtIdCliente').val(data.IdCliente);
     $('#txtNombre').val(data.Nombre);
-    $("#txtApellido").val(data.Apellido);
-    $("#txtTelefono").val(data.Telefono);
+    $('#txtApellido').val(data.Apellido);
+    $('#txtTelefono').val(data.Telefono);
     $('#txtTipo').val(data.Tipo);
     $('#txtEstado').val(data.Estado);
 
@@ -143,16 +142,16 @@ function loadDtl(data) {
 }
 
 function Guardar() {
-    var record = "'IdCliente':" + IdRecord;
-    record += ",'Nombre':'" + $.trim($('#txtIdCliente').val()) + "'";
-    record += ",'Apellido':'" + $.trim($('#txtNombre').val()) + "'";
-    record += ",'Telefono':'" + $.trim($('#txtApellido').val()) + "'";
-    record += ",'Tipo':" + $.trim($('#txtTelefono').val());
-    record += ",'Estado':" + $.trim($('#txtEstado').val());
+    var record = "'IdCliente
+    ':" + IdCliente;
+    record += ",'CardType':'" + $.trim($('#txtCardType').val()) + "'";
+    record += ",'CardNumber':'" + $.trim($('#txtCardNumber').val()) + "'";
+    record += ",'ExpMonth':'" + $.trim($('#txtExpMonth').val()) + "'";
+    record += ",'ExpYear':" + $.trim($('#txtExpYear').val());
 
     $.ajax({
         type: 'POST',
-        url: '/Clientes/Guardar',
+        url: '/CreditCard/Guardar',
         data: eval('({' + record + '})'),
         success: function (response) {
             if (response.success) {
@@ -171,7 +170,7 @@ function Guardar() {
 function Eliminar() {
     $.ajax({
         type: 'POST',
-        url: '/Clientes/Eliminar/?IdCliente=' + IdRecord,
+        url: '/CreditCard/Eliminar/?CreditCardID=' + IdRecord,
         success: function (response) {
             if (response.success) {
                 $.notify(response.message, { globalPosition: "top center", className: "success" });

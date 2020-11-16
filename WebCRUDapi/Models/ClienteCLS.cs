@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebCRUDapi.Models
 {
-    public class ClientesCLS
+    public class ClienteCLS
     {
         public int IdCliente { get; set; }
         public string Nombre { get; set; }
