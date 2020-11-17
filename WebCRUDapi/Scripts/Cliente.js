@@ -1,12 +1,12 @@
 ﻿var tableHdr = null;
-var IdCliente = 0;
+var IdRecord = 0;
 
 $(document).ready(function () {
     loadData();
 
     $('#btnnuevo').on('click', function (e) {
         e.preventDefault();
-        IdCliente = 0;
+        IdRecord = 0;
         NewRecord();
     });
 
@@ -70,7 +70,7 @@ function loadData() {
         },
         columnDefs: [
             {
-                width: "10%",
+                width: "15%",
                 targets: 0,
                 data: "IdCliente"
             },
@@ -85,28 +85,28 @@ function loadData() {
                 data: "Apellido"
             },
             {
-                width: "20%",
+                width: "15%",
                 targets: 3,
                 data: "Telefono"
             },
             {
-                width: "10%",
+                width: "14%",
                 targets: 4,
                 data: "Tipo"
             },
             {
-                width: "10%",
+                width: "14%",
                 targets: 5,
                 data: "Estado"
             },
             {
-                width: "5%",
+                width: "1%",
                 targets: 6,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-info btn-sm btn-edit" data-target="#modal-record"><i class="fa fa-pencil"></i></button>'
             },
             {
-                width: "5%",
+                width: "1%",
                 targets: 7,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>'
@@ -131,7 +131,6 @@ function NewRecord() {
 function loadDtl(data) {
     $(".modal-header h3").text("Editar Cliente");
 
-    $('#txtIdCliente').val(data.IdCliente);
     $('#txtNombre').val(data.Nombre);
     $('#txtApellido').val(data.Apellido);
     $('#txtTelefono').val(data.Telefono);
@@ -142,16 +141,16 @@ function loadDtl(data) {
 }
 
 function Guardar() {
-    var record = "'IdCliente
-    ':" + IdCliente;
-    record += ",'CardType':'" + $.trim($('#txtCardType').val()) + "'";
-    record += ",'CardNumber':'" + $.trim($('#txtCardNumber').val()) + "'";
-    record += ",'ExpMonth':'" + $.trim($('#txtExpMonth').val()) + "'";
-    record += ",'ExpYear':" + $.trim($('#txtExpYear').val());
+    var record = "'IdCliente':" + IdRecord;
+    record += ",'Nombre':'" + $.trim($('#txtNombre').val()) + "'";
+    record += ",'Apellido':'" + $.trim($('#txtApellido').val()) + "'";
+    record += ",'Telefono':'" + $.trim($('#txtTelefono').val()) + "'";
+    record += ",'Tipo':'" + $.trim($('#txtTipo').val()) + "'";
+    record += ",'Estado':'" + $.trim($('#txtEstado').val()) + "'";
 
     $.ajax({
         type: 'POST',
-        url: '/CreditCard/Guardar',
+        url: '/Cliente/Guardar',
         data: eval('({' + record + '})'),
         success: function (response) {
             if (response.success) {
@@ -170,7 +169,7 @@ function Guardar() {
 function Eliminar() {
     $.ajax({
         type: 'POST',
-        url: '/CreditCard/Eliminar/?CreditCardID=' + IdRecord,
+        url: '/Cliente/Eliminar/?IdCliente=' + IdRecord,
         success: function (response) {
             if (response.success) {
                 $.notify(response.message, { globalPosition: "top center", className: "success" });
