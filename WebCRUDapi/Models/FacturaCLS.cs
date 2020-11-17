@@ -13,6 +13,6 @@ namespace WebCRUDapi.Models
         public string Fecha { get; set; }
         public int IdZonaCliente { get; set; }
         public string Total { get; set; }
-
+        public ClienteCLS Cliente { get; set; }
     }
 }

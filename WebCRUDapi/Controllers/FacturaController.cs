@@ -50,7 +50,8 @@ namespace WebCRUDapi.Controllers
             string Numero,
             string Fecha,
             int IdZonaCliente,
-            string Total
+            string Total,
+            int IdCliente
             )
         {
             try
@@ -61,6 +62,7 @@ namespace WebCRUDapi.Controllers
                 factura.Fecha = Fecha;
                 factura.IdZonaCliente = IdZonaCliente;
                 factura.Total = Total;
+                factura.Cliente = new ClienteController().Elemento(IdCliente);
 
                 HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseURL);

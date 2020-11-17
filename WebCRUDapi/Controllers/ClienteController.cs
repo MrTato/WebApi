@@ -44,6 +44,23 @@ namespace WebCRUDapi.Controllers
 
         }
 
+        /**
+         * Receieves the id of a client
+         * Returns a class with all of the specified client's data
+         */
+        public ClienteCLS Elemento(int IdCliente)
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(baseURL);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = httpClient.GetAsync($"/api/Clientes/{IdCliente}").Result;
+            string data = response.Content.ReadAsStringAsync().Result;
+            ClienteCLS cliente = JsonConvert.DeserializeObject<ClienteCLS>(data);
+
+            return cliente;
+        }
+
         public JsonResult Guardar(
             int IdCliente,
             string Nombre,

@@ -44,7 +44,9 @@ function loadData() {
             { "data": "Numero" },
             { "data": "Fecha" },
             { "data": "IdZonaCliente" },
-            { "data": "Total" }
+            { "data": "Total" },
+            { "data": "Cliente.Nombre" },
+            { "data": "Cliente.Apellido" }
         ],
         processing: true,
         language: {
@@ -69,12 +71,12 @@ function loadData() {
         },
         columnDefs: [
             {
-                width: "20%",
+                width: "15%",
                 targets: 0,
                 data: "IdFactura"
             },
             {
-                width: "25%",
+                width: "15%",
                 targets: 1,
                 data: "Numero"
             },
@@ -84,24 +86,34 @@ function loadData() {
                 data: "Fecha"
             },
             {
-                width: "14%",
+                width: "9%",
                 targets: 3,
                 data: "IdZonaCliente"
             },
             {
-                width: "14%",
+                width: "9%",
                 targets: 4,
                 data: "Total"
             },
             {
-                width: "1%",
+                width: "15%",
                 targets: 5,
+                data: "Cliente.Nombre"
+            },
+            {
+                width: "15%",
+                targets: 6,
+                data: "Cliente.Apellido"
+            },
+            {
+                width: "1%",
+                targets: 7,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-info btn-sm btn-edit" data-target="#modal-record"><i class="fa fa-pencil"></i></button>'
             },
             {
                 width: "1%",
-                targets: 6,
+                targets: 8,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>'
             }
@@ -116,6 +128,7 @@ function NewRecord() {
     $('#txtFecha').val('');
     $('#txtIdZonaCliente').val('');
     $('#txtTotal').val('');
+    $('#txtIdCliente').val('');
 
     $('#modal-record').modal('toggle');
 }
@@ -127,6 +140,7 @@ function loadDtl(data) {
     $('#txtFecha').val(data.Fecha);
     $('#txtIdZonaCliente').val(data.IdZonaCliente);
     $('#txtTotal').val(data.Total);
+    $('#txtIdCliente').val(data.Cliente.IdCliente);
 
     $('#modal-record').modal('toggle');
 }
@@ -137,6 +151,7 @@ function Guardar() {
     record += ",'Fecha':'" + $.trim($('#txtFecha').val()) + "'";
     record += ",'IdZonaCliente':'" + $.trim($('#txtIdZonaCliente').val()) + "'";
     record += ",'Total':'" + $.trim($('#txtTotal').val()) + "'";
+    record += ",'IdCliente':'" + $.trim($('#txtIdCliente').val()) + "'";
 
     $.ajax({
         type: 'POST',
