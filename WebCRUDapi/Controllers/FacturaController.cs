@@ -48,10 +48,9 @@ namespace WebCRUDapi.Controllers
         public JsonResult Guardar(
             int IdFactura,
             string Numero,
-            int IdCliente,
-            DateTime Fecha,
+            string Fecha,
             int IdZonaCliente,
-            SqlMoney Total
+            string Total
             )
         {
             try
@@ -59,7 +58,6 @@ namespace WebCRUDapi.Controllers
                 FacturaCLS factura = new FacturaCLS();
                 factura.IdFactura = IdFactura;
                 factura.Numero = Numero;
-                factura.IdCliente = IdCliente;
                 factura.Fecha = Fecha;
                 factura.IdZonaCliente = IdZonaCliente;
                 factura.Total = Total;

@@ -10,10 +10,9 @@ namespace WebCRUDapi.Models
     {
         public int IdFactura { get; set; }
         public string Numero { get; set; }
-        public int IdCliente { get; set; }
-        public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         public int IdZonaCliente { get; set; }
-        public SqlMoney Total { get; set; }
+        public string Total { get; set; }
 
     }
 }

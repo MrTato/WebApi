@@ -42,7 +42,6 @@ function loadData() {
         columns: [
             { "data": "IdFactura" },
             { "data": "Numero" },
-            { "data": "IdCliente" },
             { "data": "Fecha" },
             { "data": "IdZonaCliente" },
             { "data": "Total" }
@@ -70,47 +69,41 @@ function loadData() {
         },
         columnDefs: [
             {
-                width: "15%",
+                width: "20%",
                 targets: 0,
                 data: "IdFactura"
             },
             {
-                width: "20%",
+                width: "25%",
                 targets: 1,
                 data: "Numero"
             },
             {
                 width: "20%",
                 targets: 2,
-                data: "IdCliente"
-            },
-            {
-                width: "15%",
-                targets: 3,
                 data: "Fecha"
             },
             {
                 width: "14%",
-                targets: 4,
+                targets: 3,
                 data: "IdZonaCliente"
             },
             {
                 width: "14%",
-                targets: 5,
+                targets: 4,
                 data: "Total"
             },
             {
                 width: "1%",
-                targets: 6,
+                targets: 5,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-info btn-sm btn-edit" data-target="#modal-record"><i class="fa fa-pencil"></i></button>'
             },
             {
                 width: "1%",
-                targets: 7,
+                targets: 6,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>'
-
             }
         ]
     });
@@ -120,7 +113,6 @@ function NewRecord() {
     $(".modal-header h3").text("Registrar Factura");
 
     $('#txtNumero').val('');
-    $('#txtIdCliente').val('');
     $('#txtFecha').val('');
     $('#txtIdZonaCliente').val('');
     $('#txtTotal').val('');
@@ -132,7 +124,6 @@ function loadDtl(data) {
     $(".modal-header h3").text("Editar Factura");
 
     $('#txtNumero').val(data.Numero);
-    $('#txtIdCliente').val(data.IdCliente);
     $('#txtFecha').val(data.Fecha);
     $('#txtIdZonaCliente').val(data.IdZonaCliente);
     $('#txtTotal').val(data.Total);
@@ -143,7 +134,6 @@ function loadDtl(data) {
 function Guardar() {
     var record = "'IdFactura':" + IdRecord;
     record += ",'Numero':'" + $.trim($('#txtNumero').val()) + "'";
-    record += ",'IdCliente':'" + $.trim($('#txtIdCliente').val()) + "'";
     record += ",'Fecha':'" + $.trim($('#txtFecha').val()) + "'";
     record += ",'IdZonaCliente':'" + $.trim($('#txtIdZonaCliente').val()) + "'";
     record += ",'Total':'" + $.trim($('#txtTotal').val()) + "'";
