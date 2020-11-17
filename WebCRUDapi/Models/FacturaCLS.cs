@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebCRUDapi.Models
 {
-    public class FacturasCLS
+    public class FacturaCLS
     {
         public int IdFactura { get; set; }
         public string Numero { get; set; }
