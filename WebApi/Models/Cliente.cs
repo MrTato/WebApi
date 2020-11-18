@@ -14,23 +14,11 @@ namespace WebApi.Models
     
     public partial class Cliente
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Cliente()
-        {
-            this.Factura = new HashSet<Factura>();
-            this.ZonaCliente = new HashSet<ZonaCliente>();
-        }
-    
         public int IdCliente { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Telefono { get; set; }
         public string Tipo { get; set; }
         public string Estado { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Factura> Factura { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ZonaCliente> ZonaCliente { get; set; }
     }
 }

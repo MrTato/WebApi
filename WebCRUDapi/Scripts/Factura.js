@@ -19,13 +19,13 @@ $(document).ready(function () {
         var _this = $(this).parents('tr');
         var data = tableHdr.row(_this).data();
         loadDtl(data);
-        IdRecord = data.CreditCardID;
+        IdRecord = data.IdFactura;
     });
 
     $('#dt-records').on('click', 'button.btn-delete', function (e) {
         var _this = $(this).parents('tr');
         var data = tableHdr.row(_this).data();
-        IdRecord = data.CreditCardID;
+        IdRecord = data.IdFactura;
         if (confirm('¿Seguro de eliminar el registro?')) {
             Eliminar();
         }
@@ -37,15 +37,16 @@ function loadData() {
     tableHdr = $('#dt-records').DataTable({
         responsive: true,
         destroy: true,
-        ajax: "/Cliente/Lista",
+        ajax: "/Factura/Lista",
         order: [],
         columns: [
-            { "data": "IdCliente" },
-            { "data": "Nombre" },
-            { "data": "Apellido" },
-            { "data": "Telefono" },
-            { "data": "Tipo" },
-            { "data": "Estado" }
+            { "data": "IdFactura" },
+            { "data": "Numero" },
+            { "data": "Fecha" },
+            { "data": "IdZonaCliente" },
+            { "data": "Total" },
+            { "data": "Cliente.Nombre" },
+            { "data": "Cliente.Apellido" }
         ],
         processing: true,
         language: {
@@ -70,89 +71,91 @@ function loadData() {
         },
         columnDefs: [
             {
-                width: "10%",
+                width: "15%",
                 targets: 0,
-                data: "IdCliente"
+                data: "IdFactura"
             },
             {
-                width: "20%",
+                width: "15%",
                 targets: 1,
-                data: "Nombre"
+                data: "Numero"
             },
             {
                 width: "20%",
                 targets: 2,
-                data: "Apellido"
+                data: "Fecha"
             },
             {
-                width: "20%",
+                width: "9%",
                 targets: 3,
-                data: "Telefono"
+                data: "IdZonaCliente"
             },
             {
-                width: "10%",
-                targets: 3,
-                data: "Tipo"
-            },
-            {
-                width: "10%",
-                targets: 3,
-                data: "Estado"
-            },
-            {
-                width: "5%",
+                width: "9%",
                 targets: 4,
+                data: "Total"
+            },
+            {
+                width: "15%",
+                targets: 5,
+                data: "Cliente.Nombre"
+            },
+            {
+                width: "15%",
+                targets: 6,
+                data: "Cliente.Apellido"
+            },
+            {
+                width: "1%",
+                targets: 7,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-info btn-sm btn-edit" data-target="#modal-record"><i class="fa fa-pencil"></i></button>'
             },
             {
-                width: "5%",
-                targets: 5,
+                width: "1%",
+                targets: 8,
                 data: null,
                 defaultContent: '<button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>'
-
             }
         ]
     });
 }
 
 function NewRecord() {
-    $(".modal-header h3").text("Registrar cliente");
+    $(".modal-header h3").text("Registrar Factura");
 
+    $('#txtNumero').val('');
+    $('#txtFecha').val('');
+    $('#txtIdZonaCliente').val('');
+    $('#txtTotal').val('');
     $('#txtIdCliente').val('');
-    $('#txtNombre').val('');
-    $('#txtApellido').val('');
-    $('#txtTelefono').val('');
-    $('#txtTipo').val('');
-    $('#txtEstado').val('');
 
     $('#modal-record').modal('toggle');
 }
 
 function loadDtl(data) {
-    $(".modal-header h3").text("Editar datos de cliente");
+    $(".modal-header h3").text("Editar Factura");
 
-    $('#txtIdCliente').val(data.IdCliente);
-    $('#txtNombre').val(data.Nombre);
-    $("#txtApellido").val(data.Apellido);
-    $("#txtTelefono").val(data.Telefono);
-    $('#txtTipo').val(data.Tipo);
-    $('#txtEstado').val(data.Estado);
+    $('#txtNumero').val(data.Numero);
+    $('#txtFecha').val(data.Fecha);
+    $('#txtIdZonaCliente').val(data.IdZonaCliente);
+    $('#txtTotal').val(data.Total);
+    // $('#txtIdCliente').val(data.Cliente.IdCliente);
 
     $('#modal-record').modal('toggle');
 }
 
 function Guardar() {
-    var record = "'IdCliente':" + IdRecord;
-    record += ",'Nombre':'" + $.trim($('#txtIdCliente').val()) + "'";
-    record += ",'Apellido':'" + $.trim($('#txtNombre').val()) + "'";
-    record += ",'Telefono':'" + $.trim($('#txtApellido').val()) + "'";
-    record += ",'Tipo':" + $.trim($('#txtTelefono').val());
-    record += ",'Estado':" + $.trim($('#txtEstado').val());
+    var record = "'IdFactura':" + IdRecord;
+    record += ",'Numero':'" + $.trim($('#txtNumero').val()) + "'";
+    record += ",'Fecha':'" + $.trim($('#txtFecha').val()) + "'";
+    record += ",'IdZonaCliente':'" + $.trim($('#txtIdZonaCliente').val()) + "'";
+    record += ",'Total':'" + $.trim($('#txtTotal').val()) + "'";
+    record += ",'IdCliente':'" + $.trim($('#txtIdCliente').val()) + "'";
 
     $.ajax({
         type: 'POST',
-        url: '/Clientes/Guardar',
+        url: '/Factura/Guardar',
         data: eval('({' + record + '})'),
         success: function (response) {
             if (response.success) {
@@ -171,7 +174,7 @@ function Guardar() {
 function Eliminar() {
     $.ajax({
         type: 'POST',
-        url: '/Clientes/Eliminar/?IdCliente=' + IdRecord,
+        url: '/Factura/Eliminar/?IdFactura=' + IdRecord,
         success: function (response) {
             if (response.success) {
                 $.notify(response.message, { globalPosition: "top center", className: "success" });

@@ -13,10 +13,10 @@ namespace WebApi.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BDServicioEntities : DbContext
+    public partial class BDServicioEntities1 : DbContext
     {
-        public BDServicioEntities()
-            : base("name=BDServicioEntities")
+        public BDServicioEntities1()
+            : base("name=BDServicioEntities1")
         {
         }
     
@@ -26,13 +26,5 @@ namespace WebApi.Models
         }
     
         public virtual DbSet<Cliente> Cliente { get; set; }
-        public virtual DbSet<DetalleFactura> DetalleFactura { get; set; }
-        public virtual DbSet<Factura> Factura { get; set; }
-        public virtual DbSet<Servicio> Servicio { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<TipoServicio> TipoServicio { get; set; }
-        public virtual DbSet<Ubicacion> Ubicacion { get; set; }
-        public virtual DbSet<Zona> Zona { get; set; }
-        public virtual DbSet<ZonaCliente> ZonaCliente { get; set; }
     }
 }

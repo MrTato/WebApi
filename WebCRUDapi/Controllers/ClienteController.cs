@@ -8,12 +8,14 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebCRUDapi.Models;
+using System.Net.Http.Headers;
 
 namespace WebCRUDapi.Controllers
 {
-    public class ClientesController : Controller
+    public class ClienteController : Controller
     {
-        private string baseURL = "https://localhost:44392/";
+        // private string baseURL = "https://localhost:44392/";
+        private string baseURL = "https://localhost:44344/";
         // GET: Clientes
         public ActionResult Index()
         {
@@ -24,11 +26,11 @@ namespace WebCRUDapi.Controllers
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(baseURL);
-            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             HttpResponseMessage response = httpClient.GetAsync("/api/Clientes").Result;
             string data = response.Content.ReadAsStringAsync().Result;
-            List<ClientesCLS> clientes = JsonConvert.DeserializeObject<List<ClientesCLS>>(data);
+            List<ClienteCLS> clientes = JsonConvert.DeserializeObject<List<ClienteCLS>>(data);
 
             return Json(
                 new
@@ -42,6 +44,23 @@ namespace WebCRUDapi.Controllers
 
         }
 
+        /**
+         * Receieves the id of a client
+         * Returns a class with all of the specified client's data
+         */
+        public ClienteCLS Elemento(int IdCliente)
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(baseURL);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = httpClient.GetAsync($"/api/Clientes/{IdCliente}").Result;
+            string data = response.Content.ReadAsStringAsync().Result;
+            ClienteCLS cliente = JsonConvert.DeserializeObject<ClienteCLS>(data);
+
+            return cliente;
+        }
+
         public JsonResult Guardar(
             int IdCliente,
             string Nombre,
@@ -53,7 +72,7 @@ namespace WebCRUDapi.Controllers
         {
             try
             {
-                ClientesCLS cliente = new ClientesCLS();
+                ClienteCLS cliente = new ClienteCLS();
                 cliente.IdCliente = IdCliente;
                 cliente.Nombre = Nombre;
                 cliente.Apellido = Apellido;
@@ -63,7 +82,7 @@ namespace WebCRUDapi.Controllers
 
                 HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseURL);
-                httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 string clienteJson = JsonConvert.SerializeObject(cliente);
                 HttpContent body = new StringContent(clienteJson, Encoding.UTF8, "application/json");
@@ -117,9 +136,10 @@ namespace WebCRUDapi.Controllers
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(baseURL);
-            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             HttpResponseMessage response = httpClient.DeleteAsync($"/api/Clientes/{IdCliente}").Result;
+
             if (response.IsSuccessStatusCode)
             {
                 return Json(
