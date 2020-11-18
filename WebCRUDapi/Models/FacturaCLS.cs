@@ -6,14 +6,13 @@ using System.Web;
 
 namespace WebCRUDapi.Models
 {
-    public class FacturasCLS
+    public class FacturaCLS
     {
         public int IdFactura { get; set; }
         public string Numero { get; set; }
-        public int IdCliente { get; set; }
-        public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         public int IdZonaCliente { get; set; }
-        public SqlMoney Total { get; set; }
-
+        public string Total { get; set; }
+        public ClienteCLS Cliente { get; set; }
     }
 }
