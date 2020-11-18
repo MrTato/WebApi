@@ -140,7 +140,7 @@ function loadDtl(data) {
     $('#txtFecha').val(data.Fecha);
     $('#txtIdZonaCliente').val(data.IdZonaCliente);
     $('#txtTotal').val(data.Total);
-    $('#txtIdCliente').val(data.Cliente.IdCliente);
+    // $('#txtIdCliente').val(data.Cliente.IdCliente);
 
     $('#modal-record').modal('toggle');
 }
