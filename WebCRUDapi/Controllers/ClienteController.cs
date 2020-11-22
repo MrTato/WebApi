@@ -14,33 +14,51 @@ namespace WebCRUDapi.Controllers
 {
     public class ClienteController : Controller
     {
-        // private string baseURL = "https://localhost:44392/";
         private string baseURL = "https://localhost:44344/";
         // GET: Clientes
         public ActionResult Index()
         {
+            if (!UsuarioAutenticado())
+            {
+                return RedirectToAction("Index", "Token");
+            }
             return View();
         }
 
-        public JsonResult Lista()
+        private bool UsuarioAutenticado()
+        {
+            return HttpContext.Session["token"] != null;
+        }
+
+        public ActionResult Lista()
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(baseURL);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = httpClient.GetAsync("/api/Clientes").Result;
-            string data = response.Content.ReadAsStringAsync().Result;
-            List<ClienteCLS> clientes = JsonConvert.DeserializeObject<List<ClienteCLS>>(data);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
 
-            return Json(
-                new
-                {
-                    success = true,
-                    data = clientes,
-                    message = "done"
-                },
-                JsonRequestBehavior.AllowGet
-                );
+            HttpResponseMessage response = httpClient.GetAsync("/api/Clientes").Result;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("Index", "Token");
+            }
+            else
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                List<ClienteCLS> clientes = JsonConvert.DeserializeObject<List<ClienteCLS>>(data);
+
+                return Json(
+                    new
+                    {
+                        success = true,
+                        data = clientes,
+                        message = "done"
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
 
         }
 
@@ -61,7 +79,7 @@ namespace WebCRUDapi.Controllers
             return cliente;
         }
 
-        public JsonResult Guardar(
+        public ActionResult Guardar(
             int IdCliente,
             string Nombre,
             string Apellido,
@@ -70,6 +88,18 @@ namespace WebCRUDapi.Controllers
             string Estado
             )
         {
+            if (!UsuarioAutenticado())
+            {
+                return Json(
+                    new
+                    {
+                        success = false,
+                        message = "Usuario no autenticado"
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
+
             try
             {
                 ClienteCLS cliente = new ClienteCLS();
@@ -83,6 +113,8 @@ namespace WebCRUDapi.Controllers
                 HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseURL);
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
 
                 string clienteJson = JsonConvert.SerializeObject(cliente);
                 HttpContent body = new StringContent(clienteJson, Encoding.UTF8, "application/json");
@@ -101,6 +133,10 @@ namespace WebCRUDapi.Controllers
                             JsonRequestBehavior.AllowGet
                             );
                     }
+                    else
+                    {
+                        return RedirectToAction("Index", "Token");
+                    }
                 }
                 else
                 {
@@ -116,9 +152,13 @@ namespace WebCRUDapi.Controllers
                             JsonRequestBehavior.AllowGet
                             );
                     }
+                    else
+                    {
+                        return RedirectToAction("Index", "Token");
+                    }
                 }
                 throw new Exception("Error al guardar");
-            } 
+            }
             catch (Exception ex)
             {
                 return Json(
@@ -132,26 +172,57 @@ namespace WebCRUDapi.Controllers
             }
         }
 
-        public JsonResult Eliminar(int IdCliente) 
+        public ActionResult Eliminar(int IdCliente)
         {
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(baseURL);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            HttpResponseMessage response = httpClient.DeleteAsync($"/api/Clientes/{IdCliente}").Result;
-
-            if (response.IsSuccessStatusCode)
+            if (!UsuarioAutenticado())
             {
                 return Json(
                     new
                     {
-                        success = true,
-                        message = "Clente eliminado satisfactoriamente"
+                        success = false,
+                        message = "Usuario no autenticado"
                     },
                     JsonRequestBehavior.AllowGet
                     );
             }
-            throw new Exception("Error al eliminar");
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(baseURL);
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
+
+                HttpResponseMessage response = httpClient.DeleteAsync($"/api/Clientes/{IdCliente}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(
+                        new
+                        {
+                            success = true,
+                            message = "Clente eliminado satisfactoriamente"
+                        },
+                        JsonRequestBehavior.AllowGet
+                        );
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Token");
+                }
+                throw new Exception("Error al eliminar");
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                    new
+                    {
+                        success = false,
+                        message = ex.InnerException
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
         }
     }
 }

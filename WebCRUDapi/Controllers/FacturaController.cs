@@ -15,37 +15,54 @@ namespace WebCRUDapi.Controllers
 {
     public class FacturaController : Controller
     {
-        // private string baseURL = "https://localhost:44392/";
         private string baseURL = "https://localhost:44344/";
         // GET: Facturas
         public ActionResult Index()
         {
+            if (!UsuarioAutenticado())
+            {
+                return RedirectToAction("Index", "Token");
+            }
             return View();
         }
 
-        public JsonResult Lista()
+        private bool UsuarioAutenticado()
+        {
+            return HttpContext.Session["token"] != null;
+        }
+
+        public ActionResult Lista()
         {
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(baseURL);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
+
             HttpResponseMessage response = httpClient.GetAsync("/api/Facturas").Result;
-            string data = response.Content.ReadAsStringAsync().Result;
-            List<FacturaCLS> facturas = JsonConvert.DeserializeObject<List<FacturaCLS>>(data);
 
-            return Json(
-                new
-                {
-                    success = true,
-                    data = facturas,
-                    message = "done"
-                },
-                JsonRequestBehavior.AllowGet
-                );
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("Index", "Token");
+            }
+            else
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                List<FacturaCLS> facturas = JsonConvert.DeserializeObject<List<FacturaCLS>>(data);
 
+                return Json(
+                    new
+                    {
+                        success = true,
+                        data = facturas,
+                        message = "done"
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
         }
 
-        public JsonResult Guardar(
+        public ActionResult Guardar(
             int IdFactura,
             string Numero,
             string Fecha,
@@ -54,6 +71,17 @@ namespace WebCRUDapi.Controllers
             int IdCliente
             )
         {
+            if (!UsuarioAutenticado())
+            {
+                return Json(
+                    new
+                    {
+                        success = false,
+                        message = "Usuario no autenticado"
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
             try
             {
                 FacturaCLS factura = new FacturaCLS();
@@ -67,6 +95,8 @@ namespace WebCRUDapi.Controllers
                 HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseURL);
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
 
                 string facturaJSON = JsonConvert.SerializeObject(factura);
                 HttpContent body = new StringContent(facturaJSON, Encoding.UTF8, "application/json");
@@ -85,6 +115,10 @@ namespace WebCRUDapi.Controllers
                             JsonRequestBehavior.AllowGet
                             );
                     }
+                    else
+                    {
+                        return RedirectToAction("Index", "Token");
+                    }
                 }
                 else
                 {
@@ -99,6 +133,10 @@ namespace WebCRUDapi.Controllers
                             },
                             JsonRequestBehavior.AllowGet
                             );
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Token");
                     }
                 }
                 throw new Exception("Error al guardar");
@@ -116,26 +154,57 @@ namespace WebCRUDapi.Controllers
             }
         }
 
-        public JsonResult Eliminar(int IdFactura)
+        public ActionResult Eliminar(int IdFactura)
         {
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(baseURL);
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            HttpResponseMessage response = httpClient.DeleteAsync($"/api/Facturas/{IdFactura}").Result;
-
-            if (response.IsSuccessStatusCode)
+            if (!UsuarioAutenticado())
             {
                 return Json(
                     new
                     {
-                        success = true,
-                        message = "Factura eliminada satisfactoriamente"
+                        success = false,
+                        message = "Usuario no autenticado"
                     },
                     JsonRequestBehavior.AllowGet
                     );
             }
-            throw new Exception("Error al eliminar");
+            try
+            {
+                HttpClient httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(baseURL);
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session["token"].ToString());
+
+                HttpResponseMessage response = httpClient.DeleteAsync($"/api/Facturas/{IdFactura}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(
+                        new
+                        {
+                            success = true,
+                            message = "Factura eliminada satisfactoriamente"
+                        },
+                        JsonRequestBehavior.AllowGet
+                        );
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Token");
+                }
+                throw new Exception("Error al eliminar");
+            }
+            catch (Exception ex)
+            {
+                return Json(
+                    new
+                    {
+                        success = false,
+                        message = ex.InnerException
+                    },
+                    JsonRequestBehavior.AllowGet
+                    );
+            }
         }
     }
 }
