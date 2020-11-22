@@ -135,6 +135,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -142,7 +143,9 @@
     <Compile Include="Models\ClienteCLS.cs" />
     <Compile Include="Models\FacturaCLS.cs" />
     <Compile Include="Models\ServicioCLS.cs" />
+    <Compile Include="Models\Token.cs" />
     <Compile Include="Models\UbicacionCLS.cs" />
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +191,7 @@
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\Factura\Index.cshtml" />
     <Content Include="Views\Ubicacion\Index.cshtml" />
+    <Content Include="Views\Token\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
